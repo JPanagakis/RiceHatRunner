@@ -67,7 +67,7 @@ public class Player implements ActionListener {
         height = image.getHeight(null);
     }
 
-    public Rectangle getBounds(){ return new Rectangle(x, y, width, height); }
+    public Rectangle getBounds(){ return new Rectangle(x, y, width, height - 5); }
 
     public boolean isVisible(){ return vis; }
 
@@ -96,7 +96,7 @@ public class Player implements ActionListener {
         if (key == KeyEvent.VK_LEFT){
             if (x < 0){x = 0;}
             if (x > 0) {
-                dx = -4;
+                dx = -6;
             } else {
                 dx = 0;
             }
@@ -105,7 +105,7 @@ public class Player implements ActionListener {
         if (key == KeyEvent.VK_RIGHT){
             if (x > 415){x = 415;}
             if (x < 415) {
-                dx = 4;
+                dx = 6;
             } else {
                 dx = 0;
             }
@@ -114,7 +114,7 @@ public class Player implements ActionListener {
         if (key == KeyEvent.VK_UP) {
             if (y < 0){y = 0;}
             if (y > 0) {
-                dy = -2;
+                dy = -3;
             } else {
                 dy = 0;
             }
