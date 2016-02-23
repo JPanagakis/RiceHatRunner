@@ -19,12 +19,12 @@ public class Grass {
     public void initGrass(){
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL resource = classLoader.getResource("images/grass.png");
+        URL resource = classLoader.getResource("images/Grass.png");
 
         ImageIcon ii = new ImageIcon(resource);
         image = ii.getImage();
 
-        x = -100;
+        x = 0;
         y = -1400;
     }
 
