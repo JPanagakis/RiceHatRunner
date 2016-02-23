@@ -12,6 +12,8 @@ public class RiceHatRunner extends JFrame implements ActionListener{
     private Board board;
     private Timer timer;
     private final int DELAY = 5;
+    private JSplitPane splitPane;
+    private int divLocation;
 
     public RiceHatRunner(){
 
@@ -22,8 +24,10 @@ public class RiceHatRunner extends JFrame implements ActionListener{
 
         board = new Board();
         score = new Score();
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, board, score);
-        splitPane.setDividerLocation(500);
+
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, board, score);
+        divLocation = 700;
+        splitPane.setDividerLocation(divLocation);
         setLayout(new BorderLayout());
 
         add(splitPane, BorderLayout.CENTER);
@@ -33,7 +37,7 @@ public class RiceHatRunner extends JFrame implements ActionListener{
         pack();
         setResizable(false);
 
-        setTitle("Speed Runner");
+        setTitle("Rice Hat Runner");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -44,9 +48,22 @@ public class RiceHatRunner extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e){
 
+
         setScoreBoardString();
         setNumberOfLives();
         setGameOver();
+        setTitle();
+        checkTitle();
+    }
+
+    public void checkTitle(){
+
+        if (divLocation == 700) {
+            if (!(board.getTitle())) {
+                divLocation = 500;
+                splitPane.setDividerLocation(divLocation);
+            }
+        }
     }
 
     public void setNumberOfLives(){
@@ -57,6 +74,11 @@ public class RiceHatRunner extends JFrame implements ActionListener{
     public void setGameOver(){
 
         score.setGameOver(board.getGameOver());
+    }
+
+    public void setTitle(){
+
+        score.setTitle(board.getTitle());
     }
 
     public void setScoreBoardString(){

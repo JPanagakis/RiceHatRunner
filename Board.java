@@ -16,8 +16,11 @@ public class Board extends JPanel implements ActionListener{
     private URL punchURL;
     private URL mainBgmURL;
     private URL gameOverBgmURL;
+    private URL titleBgmUrl;
     private SpeakerBox bgm;
     private SpeakerBox gameOverBgm;
+    private SpeakerBox titleBgm;
+    private TitleScreen titleScreen;
     private Grass grass;
     private Player player;
     private CountDown countDown;
@@ -27,6 +30,7 @@ public class Board extends JPanel implements ActionListener{
     private Bird bird;
     private Bird bird2;
     private boolean gameOver;
+    private boolean title;
     private final int DELAY = 5;
     private int difficulty;
     private final int difficulty1 = 15000;
@@ -50,6 +54,8 @@ public class Board extends JPanel implements ActionListener{
         setDoubleBuffered(true);
         setPreferredSize(new Dimension(500, 700));
 
+        titleScreen = new TitleScreen();
+
         grass = new Grass();
         player = new Player();
         countDown = new CountDown();
@@ -59,26 +65,32 @@ public class Board extends JPanel implements ActionListener{
         bird = new Bird();
         bird2 = new Bird();
 
+        title = true;
         gameOver = false;
         numberOfLives = 2;
         difficulty = -4000;
 
         timer = new Timer(DELAY, this);
-        timer.start();
+
 
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         punchURL = classLoader.getResource("sound/punch.wav");
+        titleBgmUrl = classLoader.getResource("sound/Sea.wav");
         mainBgmURL = classLoader.getResource("sound/Genocide.wav");
         gameOverBgmURL = classLoader.getResource("sound/Rain.wav");
 
+        titleBgm = new SpeakerBox(titleBgmUrl);
         gameOverBgm = new SpeakerBox(gameOverBgmURL);
         bgm = new SpeakerBox(mainBgmURL);
-        bgm.start();
+
+        titleBgm.start();
     }
 
     public int getNumberOfLives(){ return numberOfLives; }
 
     public boolean getGameOver(){ return gameOver; }
+
+    public boolean getTitle(){return title; }
 
     public void setScoreBoardString(String s){ scoreBoardString = s; }
 
@@ -86,13 +98,21 @@ public class Board extends JPanel implements ActionListener{
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
-        if (!gameOver) {
+        if (title){
+            drawTitle(g);
+        } else if (!gameOver) {
             drawObjects(g);
         } else {
             drawGameOver(g);
         }
 
         Toolkit.getDefaultToolkit().sync();
+    }
+
+    private void drawTitle(Graphics g){
+
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.drawImage(titleScreen.getImage(), titleScreen.getX(), titleScreen.getY(), this);
     }
 
     private void drawObjects(Graphics g){
@@ -137,7 +157,9 @@ public class Board extends JPanel implements ActionListener{
 
         normalMove();
 
-        difficulty += DELAY;
+        if (!title) {
+            difficulty += DELAY;
+        }
         repaint();
     }
 
@@ -161,8 +183,11 @@ public class Board extends JPanel implements ActionListener{
 
             if (gameOver) {
                 restart();
-            } else {
-                //do nothing
+            } else if (title){
+                title = false;
+                timer.start();
+                titleBgm.stop();
+                bgm.start();
             }
         }
     }
