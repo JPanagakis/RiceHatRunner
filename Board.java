@@ -1,10 +1,11 @@
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
+import java.net.URL;
 
 /**
  * Created by Justin on 1/7/2016.
@@ -12,6 +13,11 @@ import java.io.IOException;
 public class Board extends JPanel implements ActionListener{
 
     private Timer timer;
+    private URL punchURL;
+    private URL mainBgmURL;
+    private URL gameOverBgmURL;
+    private SpeakerBox bgm;
+    private SpeakerBox gameOverBgm;
     private Grass grass;
     private Player player;
     private CountDown countDown;
@@ -59,6 +65,15 @@ public class Board extends JPanel implements ActionListener{
 
         timer = new Timer(DELAY, this);
         timer.start();
+
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        punchURL = classLoader.getResource("sound/punch.wav");
+        mainBgmURL = classLoader.getResource("sound/Genocide.wav");
+        gameOverBgmURL = classLoader.getResource("sound/Rain.wav");
+
+        gameOverBgm = new SpeakerBox(gameOverBgmURL);
+        bgm = new SpeakerBox(mainBgmURL);
+        bgm.start();
     }
 
     public int getNumberOfLives(){ return numberOfLives; }
@@ -94,6 +109,7 @@ public class Board extends JPanel implements ActionListener{
 
     private void drawGameOver(Graphics g){
 
+        bgm.stop();
         String msg = "Game Over";
         String msg1 = "Score: " + scoreBoardString;
         String msg2 = "Press Space to Try Again!";
@@ -133,6 +149,7 @@ public class Board extends JPanel implements ActionListener{
 
         if (gameOver){
             timer.stop();
+            gameOverBgm.restart();
         }
     }
 
@@ -152,6 +169,8 @@ public class Board extends JPanel implements ActionListener{
 
     public void restart(){
 
+        gameOverBgm.stop();
+        bgm.restart();
         gameOver = false;
         numberOfLives = 2;
         difficulty = -4000;
@@ -178,6 +197,25 @@ public class Board extends JPanel implements ActionListener{
 
             player.setInvincible(true);
             numberOfLives -= 1;
+
+            doSound(punchURL);
+        }
+    }
+
+    public void doSound(URL url){
+        try {
+            AudioInputStream stream = AudioSystem.getAudioInputStream(url);
+            AudioFormat format = stream.getFormat();
+            DataLine.Info info = new DataLine.Info(Clip.class, format);
+            Clip clip = (Clip) AudioSystem.getLine(info);
+            clip.open(stream);
+            if (url.equals(mainBgmURL)){
+                clip.loop(1);
+            } else {
+                clip.start();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 
