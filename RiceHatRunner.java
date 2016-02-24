@@ -53,6 +53,7 @@ public class RiceHatRunner extends JFrame implements ActionListener{
         setNumberOfLives();
         setGameOver();
         setTitle();
+        setPaused();
         checkTitle();
     }
 
@@ -79,6 +80,11 @@ public class RiceHatRunner extends JFrame implements ActionListener{
     public void setTitle(){
 
         score.setTitle(board.getTitle());
+    }
+
+    public void setPaused(){
+
+        score.setPaused(board.getPaused());
     }
 
     public void setScoreBoardString(){

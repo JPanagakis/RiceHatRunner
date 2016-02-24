@@ -31,6 +31,7 @@ public class Board extends JPanel implements ActionListener{
     private Bird bird2;
     private boolean gameOver;
     private boolean title;
+    private boolean paused;
     private final int DELAY = 5;
     private int difficulty;
     private final int difficulty1 = 15000;
@@ -67,6 +68,8 @@ public class Board extends JPanel implements ActionListener{
 
         title = true;
         gameOver = false;
+        paused = false;
+
         numberOfLives = 2;
         difficulty = -4000;
 
@@ -90,7 +93,9 @@ public class Board extends JPanel implements ActionListener{
 
     public boolean getGameOver(){ return gameOver; }
 
-    public boolean getTitle(){return title; }
+    public boolean getTitle(){ return title; }
+
+    public boolean getPaused(){ return paused; }
 
     public void setScoreBoardString(String s){ scoreBoardString = s; }
 
@@ -157,7 +162,7 @@ public class Board extends JPanel implements ActionListener{
 
         normalMove();
 
-        if (!title) {
+        if (!title && !paused) {
             difficulty += DELAY;
         }
         repaint();
@@ -188,6 +193,16 @@ public class Board extends JPanel implements ActionListener{
                 timer.start();
                 titleBgm.stop();
                 bgm.start();
+            } else {
+                if (!paused) {
+                    timer.stop();
+                    paused = true;
+                    bgm.stop();
+                } else {
+                    timer.start();
+                    paused = false;
+                    bgm.start();
+                }
             }
         }
     }

@@ -67,7 +67,7 @@ public class Player implements ActionListener {
         height = image.getHeight(null);
     }
 
-    public Rectangle getBounds(){ return new Rectangle(x, y, width, height - 5); }
+    public Rectangle getBounds(){ return new Rectangle(x, y, width - 5, height - 5); }
 
     public boolean isVisible(){ return vis; }
 

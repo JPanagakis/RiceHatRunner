@@ -18,6 +18,7 @@ public class Score extends JPanel implements ActionListener{
     private int numberOfLives;
     private boolean gameOver;
     private boolean title;
+    private boolean paused;
 
     private Lives lives;
 
@@ -32,6 +33,7 @@ public class Score extends JPanel implements ActionListener{
         numberOfLives = 2;
         gameOver = false;
         title = true;
+        paused = false;
 
         initScoreBoardTF();
         lives = new Lives();
@@ -89,6 +91,8 @@ public class Score extends JPanel implements ActionListener{
 
     public void setTitle(boolean bl){ title = bl; }
 
+    public void setPaused(boolean bl){ paused = bl; }
+
     public String getScoreBoardString(){
 
         scoreBoardString = Integer.toString(scoreBoard);
@@ -100,8 +104,10 @@ public class Score extends JPanel implements ActionListener{
 
         if (!gameOver) {
             if (!title) {
-                scoreBoard += 5;
-                scoreBoardString = Integer.toString(scoreBoard);
+                if (!paused) {
+                    scoreBoard += 5;
+                    scoreBoardString = Integer.toString(scoreBoard);
+                }
             }
         } else {
             scoreBoard = -4000;
