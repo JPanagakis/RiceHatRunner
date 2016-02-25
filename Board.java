@@ -21,6 +21,7 @@ public class Board extends JPanel implements ActionListener{
     private SpeakerBox gameOverBgm;
     private SpeakerBox titleBgm;
     private TitleScreen titleScreen;
+    private Pause pausePicture;
     private Grass grass;
     private Player player;
     private CountDown countDown;
@@ -56,6 +57,7 @@ public class Board extends JPanel implements ActionListener{
         setPreferredSize(new Dimension(500, 700));
 
         titleScreen = new TitleScreen();
+        pausePicture = new Pause();
 
         grass = new Grass();
         player = new Player();
@@ -127,6 +129,11 @@ public class Board extends JPanel implements ActionListener{
         g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
         g2d.drawImage(rock1.getImage(), rock1.getX(), rock1.getY(), this);
 
+        if (paused){
+            g2d.drawImage(pausePicture.getImage(), pausePicture.getX(), pausePicture.getY(), this);
+            timer.stop();
+        }
+
         startCountDown(g2d);
 
         updateDifficulty(g2d);
@@ -158,9 +165,8 @@ public class Board extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e){
 
         checkGameOver();
-        checkCollisions();
-
         normalMove();
+        checkCollisions();
 
         if (!title && !paused) {
             difficulty += DELAY;
@@ -195,7 +201,6 @@ public class Board extends JPanel implements ActionListener{
                 bgm.start();
             } else {
                 if (!paused) {
-                    timer.stop();
                     paused = true;
                     bgm.stop();
                 } else {
