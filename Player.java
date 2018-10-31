@@ -96,7 +96,7 @@ public class Player implements ActionListener {
         if (key == KeyEvent.VK_LEFT){
             if (x < 0){x = 0;}
             if (x > 0) {
-                dx = -6;
+                dx = -10;
             } else {
                 dx = 0;
             }
@@ -105,7 +105,7 @@ public class Player implements ActionListener {
         if (key == KeyEvent.VK_RIGHT){
             if (x > 415){x = 415;}
             if (x < 415) {
-                dx = 6;
+                dx = 10;
             } else {
                 dx = 0;
             }
